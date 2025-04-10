@@ -28,8 +28,8 @@ export function useAvailableLogs(channel: string | null, username: string | null
                 username = getUserId(username);
             }
 
-            const queryUrl = new URL(`https://logs.zonian.dev/api/${channel}/${username}`);
-            
+            const queryUrl = new URL(`https://logs.zonian.dev/api/${channel}/${usernameIsId ? 'id:' : ''}${username}`);
+
             try {
                 const response = await fetch(queryUrl.toString());
 
@@ -46,7 +46,7 @@ export function useAvailableLogs(channel: string | null, username: string | null
                 const responseData = await response.json();
                 
                 // Debugging: Log the structure of responseData to see its exact shape
-                console.log("responseData:", responseData);
+                // console.log("responseData:", responseData);
 
                 // Handle the response based on the available structure
                 const availableLogs = responseData.availableLogs || responseData.loggedData?.list || [];
@@ -64,7 +64,7 @@ export function useAvailableLogs(channel: string | null, username: string | null
                     const firstUserInstance = responseData.userLogs.instances[0];
 
                     // Debugging: Log firstUserInstance to see its value
-                    console.log("firstUserInstance:", firstUserInstance);
+                    // console.log("firstUserInstance:", firstUserInstance);
 
                     if (firstUserInstance) {
                         let newApiBaseUrl = firstUserInstance?.url || firstUserInstance; // Directly use firstUserInstance if it's already a URL
@@ -77,7 +77,7 @@ export function useAvailableLogs(channel: string | null, username: string | null
                             // Update the browser's URL without reloading the page
                             window.history.pushState({}, "", url.toString());
 
-                            console.log("Updated browser URL with 'instance' parameter:", url.toString());
+                            // console.log("Updated browser URL with 'instance' parameter:", url.toString());
 
                             // Optionally store it in the state if needed
                             setState({
@@ -86,17 +86,17 @@ export function useAvailableLogs(channel: string | null, username: string | null
                             });
                         } else {
                             // Simplified error message: only show the missing URL in the log
-                            console.error("URL is missing in firstUserInstance:", firstUserInstance);
+                            // console.error("URL is missing in firstUserInstance:", firstUserInstance);
                         }
                     } else {
-                        console.error("First user instance is not available:", firstUserInstance);
+                        // console.error("First user instance is not available:", firstUserInstance);
                     }
                 }
 
                 return uniqueLogs || [];  // Return unique logs, ignoring the day field
 
             } catch (err) {
-                console.error("An error occurred while fetching available logs:", err);
+                // console.error("An error occurred while fetching available logs:", err);
                 return [];  // Return an empty array on error
             }
         },

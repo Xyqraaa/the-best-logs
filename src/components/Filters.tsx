@@ -14,7 +14,7 @@ const FiltersContainer = styled.form`
     background: var(--bg-bright);
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
-	margin: 0 auto;
+    margin: 0 auto;
     z-index: 99;
 
     > * {
@@ -35,6 +35,11 @@ export function Filters() {
     const queryClient = useQueryClient();
     const channels = useChannels();
 
+    // Get the instance parameter from the URL and decode it if present.
+    const urlParams = new URLSearchParams(window.location.search);
+    const instanceParam = urlParams.get("instance");
+    const defaultInstance = instanceParam ? decodeURIComponent(instanceParam) : "";
+
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -45,14 +50,13 @@ export function Filters() {
             const username = data.get("username") as string | null;
 
             queryClient.invalidateQueries(["log", { channel: channel?.toLowerCase(), username: username?.toLowerCase() }]);
-
             setCurrents(channel, username);
         }
     };
 
     return <FiltersWrapper>
         <FiltersContainer onSubmit={handleSubmit} action="none">
-            <img src="https://xyqra.cc/assets/POGGIES-2x.webp" alt='' width="70" height="64"/>
+            <img src="/POGGIES-2x.webp" alt='' width="70" height="64"/>
             <Autocomplete
                 id="autocomplete-channels"
                 options={channels.map(channel => channel.name)}
@@ -62,9 +66,22 @@ export function Filters() {
                 clearOnBlur={false}
                 renderInput={(params) => <TextField {...params} name="channel" label="channel or id:123" variant="filled" autoFocus={state.currentChannel === null} />}
             />
-            <TextField error={state.error} name="username" label="username or id:123" variant="filled" autoComplete="off" defaultValue={state.currentUsername} autoFocus={state.currentChannel !== null && state.currentUsername === null} />
+            <TextField 
+                error={state.error} 
+                name="username" 
+                label="username or id:123" 
+                variant="filled" 
+                autoComplete="off" 
+                defaultValue={state.currentUsername} 
+                autoFocus={state.currentChannel !== null && state.currentUsername === null} 
+            />
             <Button variant="contained" color="primary" size="large" type="submit">load</Button>
             <Settings />
         </FiltersContainer>
+        {defaultInstance && (
+            <div style={{ marginTop: "10px", color: "white", padding: "5px"}}>
+                Using instance: <a href={defaultInstance} target="_blank" rel="noopener noreferrer">{defaultInstance}</a>
+            </div>
+        )}
     </FiltersWrapper>
 }

@@ -6,15 +6,15 @@ import { Emote, LogMessage, UserLogResponse } from "../types/log";
 import runes from "runes";
 
 export function useLog(channel: string, username: string, year: string, month: string): Array<LogMessage> {
-    console.log('useLog hook is running');  // Log to check if the hook is running
+    // console.log('useLog hook is running');  // Log to check if the hook is running
 
     const { state } = useContext(store);
     const urlParams = new URLSearchParams(window.location.search);
     const instanceUrl = urlParams.get('instance');
-    console.log('Extracted instance URL:', instanceUrl);
+    // console.log('Extracted instance URL:', instanceUrl);
 
     const apiBaseUrl = instanceUrl || state.apiBaseUrl;
-    console.log('Using API base URL:', apiBaseUrl);
+    // console.log('Using API base URL:', apiBaseUrl);
 
     const { data } = useQuery<Array<LogMessage>>(
         ["log", { channel, username, year, month }],
@@ -38,11 +38,11 @@ export function useLog(channel: string, username: string, year: string, month: s
                     queryUrl.searchParams.append("reverse", "1");
                 }
 
-                console.log('Final query URL:', queryUrl.toString());  // Debug check
+                // console.log('Final query URL:', queryUrl.toString());  // Debug check
 
                 return fetch(queryUrl.toString())
                     .then((response) => {
-                        console.log('API Response:', response);
+                        // console.log('API Response:', response);
                         if (response.ok) {
                             return response;
                         }
@@ -63,12 +63,12 @@ export function useLog(channel: string, username: string, year: string, month: s
                         return messages;
                     })
                     .catch((error) => {
-                        console.error('Error during fetch:', error);
+                        // console.error('Error during fetch:', error);
                         return [];
                     });
             }
 
-            console.error('Channel or username or API base URL is missing.');
+            // console.error('Channel or username or API base URL is missing.');
             return [];
         },
         { refetchOnWindowFocus: false, refetchOnReconnect: false }

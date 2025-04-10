@@ -80,7 +80,7 @@ export function Filters() {
         </FiltersContainer>
         {defaultInstance && (
             <div style={{ marginTop: "10px", color: "white", padding: "5px"}}>
-                Using instance: <a href={defaultInstance} target="_blank" rel="noopener noreferrer">{defaultInstance}</a> | This website is using the <a href="https://logs.zonian.dev/" target="_blank" rel="noopener noreferrer">best-logs</a> API.
+                Using instance: <a href={defaultInstance} target="_blank" rel="noopener noreferrer">{defaultInstance}</a> | This website is using the <a href="https://logs.zonian.dev/" target="_blank" rel="noopener noreferrer">best-logs</a> API
             </div>
         )}
     </FiltersWrapper>
